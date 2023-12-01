@@ -10,12 +10,12 @@ fn part1(input: &str) -> String {
     let lines = input.split("\n").collect::<Vec<&str>>();
     let mut sum = 0;
     for l in lines {
-        let mut digits: Vec<char> = Vec::new();
+        let mut digits: Vec<u32> = Vec::new();
 
         // find digits
         for c in l.chars() {
             if c.is_digit(10) {
-                digits.push(c);
+                digits.push(c.to_digit(10).unwrap_or(0));
             }
         }
 
@@ -23,8 +23,8 @@ fn part1(input: &str) -> String {
         let number = if digits.len() > 0 {
             let s = format!(
                 "{}{}",
-                digits.first().unwrap_or(&'0'),
-                digits.last().unwrap_or(&'0')
+                digits.first().unwrap_or(&0),
+                digits.last().unwrap_or(&0)
             );
             let value: u32 = s.parse::<u32>().unwrap();
             value
