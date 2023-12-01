@@ -38,7 +38,7 @@ fn part1(input: &str) -> String {
 }
 
 fn part2(input: &str) -> String {
-    let mut numbers = vec![
+    let numbers = vec![
         "one".to_string(),
         "two".to_string(),
         "three".to_string(),
@@ -49,53 +49,38 @@ fn part2(input: &str) -> String {
         "eight".to_string(),
         "nine".to_string(),
     ];
-    for i in 0..10 {
-        numbers.push(i.to_string());
-    }
 
     let lines = input.split("\n").collect::<Vec<&str>>();
     let mut sum = 0;
+
     for l in lines {
-        let mut first_num = "".to_string();
-        let mut second_num = "".to_string();
+        let mut digits: Vec<String> = Vec::new();
 
-        // find numbers (digits and text)
-        for i in 1..l.len() + 1 {
+        // find digits
+        for (i, c) in l.chars().enumerate() {
+            if c.is_digit(10) {
+                digits.push(c.to_string());
+            }
             for (idx, num) in numbers.iter().enumerate() {
-                if first_num == "".to_string() {
-                    // dbg!(num.to_string());
-                    // dbg!(l[0..i].to_string());
-                    if l[0..i].contains(num) {
-                        first_num = if idx < 10 {
-                            (idx + 1).to_string()
-                        } else {
-                            num.to_string()
-                        };
-                        break;
-                    }
+                if l[i..l.len()].starts_with(num) {
+                    digits.push((idx + 1).to_string());
                 }
             }
         }
 
-        for i in 1..l.len() + 1 {
-            for (idx, num) in numbers.iter().enumerate() {
-                if second_num == "".to_string() {
-                    //dbg!(num.to_string());
-                    //dbg!((l.len() - i)..l.len().to_string());
-                    if l[(l.len() - i)..l.len()].contains(num) {
-                        second_num = if idx < 10 {
-                            (idx + 1).to_string()
-                        } else {
-                            num.to_string()
-                        };
-                        break;
-                    }
-                }
-            }
-        }
-        let digits = format!("{}{}", first_num, second_num);
-        //dbg!(digits);
-        sum = sum + digits.parse::<u32>().unwrap_or(0);
+        // convert first and last to number
+        let number = if digits.len() > 0 {
+            let s = format!(
+                "{}{}",
+                digits.first().unwrap_or(&"0".to_string()),
+                digits.last().unwrap_or(&"0".to_string())
+            );
+            let value: u32 = s.parse::<u32>().unwrap_or(0);
+            value
+        } else {
+            0
+        };
+        sum = sum + number;
     }
     sum.to_string()
 }
