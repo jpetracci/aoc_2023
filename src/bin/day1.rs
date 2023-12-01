@@ -62,7 +62,7 @@ fn part2(input: &str) -> String {
                 digits.push(c.to_digit(10).unwrap_or(0));
             }
             for (idx, num) in numbers.iter().enumerate() {
-                if l[i..l.len()].starts_with(num) {
+                if l[i..].starts_with(num) {
                     digits.push((idx + 1) as u32);
                 }
             }
